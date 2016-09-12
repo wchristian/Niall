@@ -1,0 +1,27 @@
+{
+    "name": "matthewbaggett/niall",
+    "type": "project",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url":  "git@github.com:matthewbaggett/libNiall.git"
+        }
+    ],
+    "require": {
+        "segura/appcore": "^0.1.2",
+        "matthewbaggett/libniall": "dev-master",
+        "raveren/kint": "^1.0"
+    },
+    "license": "GPLv3",
+    "authors": [
+        {
+            "name": "Matthew Baggett",
+            "email": "matthew@baggett.me"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Niall\\": "src"
+        }
+    }
+}

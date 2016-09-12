@@ -1,0 +1,30 @@
+mysql:
+  image: mysql
+  volumes:
+    - "./SQL/:/docker-entrypoint-initdb.d"
+  environment:
+    - MYSQL_ROOT_PASSWORD=72fB2n9622G065y
+
+phpmyadmin:
+  image: corbinu/docker-phpmyadmin:latest
+  links:
+   - mysql
+  ports:
+   - "6819:80"
+
+redis:
+  image: redis
+
+niall_service:
+  build: ./Service
+  links:
+   - mysql
+   - redis
+  volumes:
+   - "./Service:/app"
+  ports:
+   - "6818:80"
+  environment:
+   - "MYSQL_USERNAME=niall"
+   - "MYSQL_PASSWORD=20R834Z9CKjG6gO"
+   - "MYSQL_DATABASE=niall"
