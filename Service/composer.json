@@ -10,7 +10,8 @@
     "require": {
         "segura/appcore": "^0.1.2",
         "matthewbaggett/libniall": "dev-master",
-        "raveren/kint": "^1.0"
+        "raveren/kint": "^1.0",
+        "components/jquery": "^3.1"
     },
     "license": "GPLv3",
     "authors": [
