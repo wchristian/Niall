@@ -21,7 +21,7 @@ ob_get_clean();
 $paragraphs = explode("\n", $input);
 $paragraphs = array_filter($paragraphs);
 $sentences = [];
-foreach($paragraphs as $paragraph){
+foreach ($paragraphs as $paragraph) {
     $sentences = array_merge($sentences, explode(".", $paragraph));
 }
 $sentences = array_filter($sentences);
@@ -31,21 +31,34 @@ $client = new \GuzzleHttp\Client();
 $newWords = 0;
 
 echo "Got " . count($paragraphs) . " paragraphs and " . count($sentences) . " sentences. \n";
-foreach(array_values($sentences) as $i => $sentence){
-    echo "\rInjesting " . ($i+1) . " of " . count($sentences) . "...";
-    $response = $client->request(
-        'POST',
-        $args->getOpt('niall', 'http://niall.chat') . "/v1/speak", [
-        'json' => [
-            'Message' => trim($sentence)
-        ]
-    ]);
-    if(!$response->getStatusCode() == 200 || !$response->getHeader('content-type') == 'application/json') {
-        echo $response->getBody();
-        die("\n\nFailed to communicate with service. Response type was " . $response->getHeader('content-type') . "\n");
-    }else{
-        $jsonDecoded = json_decode($response->getBody());
-        $newWords = $newWords + count($jsonDecoded->new_words);
+foreach (array_values($sentences) as $i => $sentence) {
+    echo "\rInjesting " . ($i + 1) . " of " . count($sentences) . "...";
+
+
+    try {
+        $response = $client->request(
+            'POST',
+            $args->getOpt('niall', 'http://niall.chat') . "/v1/speak", [
+            'json' => [
+                'Message' => trim($sentence)
+            ],
+            'headers' => [
+                'User-Agent' => 'niall-injester/1.0',
+                'Accept' => 'application/json',
+            ]
+        ]);
+
+
+        if (!$response->getStatusCode() == 200 || !$response->getHeader('content-type') == 'application/json') {
+            echo $response->getBody();
+            die("\n\nFailed to communicate with service. Response type was " . $response->getHeader('content-type') . "\n");
+        } else {
+            $jsonDecoded = json_decode($response->getBody());
+            $attemptCount = 0;
+            $newWords = $newWords + count($jsonDecoded->new_words);
+        }
+    } catch (\GuzzleHttp\Exception\ServerException $serverException) {
+        echo "\nHickup! {$serverException->getCode()}\n";
     }
     usleep(0.1 * 1000000);
 }
