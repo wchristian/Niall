@@ -3,7 +3,8 @@
     "type": "utility",
     "require": {
         "vanilla/garden-cli": "^1.6",
-        "raveren/kint": "^1.0"
+        "raveren/kint": "^1.0",
+        "guzzlehttp/guzzle": "^6.2"
     },
     "license": "GPLv3",
     "authors": [
