@@ -1,4 +1,17 @@
 #!/usr/local/bin/php
 <?php
+use Garden\Cli\Cli;
 
-echo "Hello world";
+require_once("vendor/autoload.php");
+
+// Define the cli options.
+$cli = new Cli();
+
+$cli->description('Import datasets into Niall.')
+    ->opt('niall:n', 'Connect to niall instance.', false)
+    ->opt('file:f', 'The filepath to import as plain text.', true);
+
+// Parse and return cli args.
+$args = $cli->parse($argv, true);
+
+\Kint::dump($args);

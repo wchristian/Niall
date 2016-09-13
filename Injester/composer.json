@@ -1,0 +1,15 @@
+{
+    "name": "matthewbaggett/niall-injester",
+    "type": "utility",
+    "require": {
+        "vanilla/garden-cli": "^1.6",
+        "raveren/kint": "^1.0"
+    },
+    "license": "GPLv3",
+    "authors": [
+        {
+            "name": "Matthew Baggett",
+            "email": "matthew@baggett.me"
+        }
+    ]
+}
