@@ -1,0 +1,28 @@
+body{
+    background-color: #0b3192;
+    background-image: url("/assets/images/niall_blue.png");
+}
+body .niall{
+
+}
+body .niall .face{
+    background-image: url("/assets/images/niall_face.png");
+    background-size: 200%;
+    width: 512px;
+    height: 512px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+body .chat{
+    height: 70px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 40%;
+    margin-left: 30%;
+    margin-right: 30%;
+}
+body .chat .log{}
+body .chat .compose{
+}
