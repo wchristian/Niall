@@ -314,12 +314,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/matthewbaggett/libNiall.git",
-                "reference": "41c200a239e579c87b1d9ae59ecc6911a94221cd"
+                "reference": "8b4308e23e908d3840829ba959b967cc9b84fcc7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/matthewbaggett/libNiall/zipball/41c200a239e579c87b1d9ae59ecc6911a94221cd",
-                "reference": "41c200a239e579c87b1d9ae59ecc6911a94221cd",
+                "url": "https://api.github.com/repos/matthewbaggett/libNiall/zipball/8b4308e23e908d3840829ba959b967cc9b84fcc7",
+                "reference": "8b4308e23e908d3840829ba959b967cc9b84fcc7",
                 "shasum": ""
             },
             "require": {
@@ -344,7 +344,7 @@
                 "source": "https://github.com/matthewbaggett/libNiall/tree/master",
                 "issues": "https://github.com/matthewbaggett/libNiall/issues"
             },
-            "time": "2016-09-12 14:07:46"
+            "time": "2016-09-13 06:15:39"
         },
         {
             "name": "monolog/monolog",
