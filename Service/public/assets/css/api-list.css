@@ -1,0 +1,28 @@
+body{
+    width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-family: "Monaco", "Andale Mono", "Courier New", "Courier", monospace;
+
+}
+
+ul{
+
+}
+li{
+    background-color: #ffc794;
+    border-color: #ff984b;
+    padding: 10px 10px;
+    margin-bottom: 10px;
+}
+li .name{
+
+}
+li .method{
+
+}
+li .pattern{
+
+}
