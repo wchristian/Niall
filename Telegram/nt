@@ -12,19 +12,6 @@ define("TELEGRAM_BOT_NAME", $environment['TELEGRAM_BOT_NAME']);
 define("NIALL_INSTANCE",    $environment['NIALL_INSTANCE']);
 define("APP_ROOT",          __DIR__);
 
-// Database Settings
-if (isset($environment['DB_PORT'])) {
-    $host = parse_url($environment['DB_PORT']);
-    $credentials = array(
-        'host'     => $host['host'],
-        'user'     => $environment['DB_ENV_MYSQL_USER'],
-        'password' => $environment['DB_ENV_MYSQL_PASSWORD'],
-        'database' => $environment['DB_ENV_MYSQL_DATABASE']
-    );
-} else {
-    die("no mysql config");
-}
-
 $nt = new \Niall\Telegram\NiallTelegram(TELEGRAM_API_KEY, TELEGRAM_BOT_NAME);
 
 while (true) {
