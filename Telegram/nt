@@ -1,0 +1,32 @@
+#!/usr/local/bin/php
+<?php
+set_time_limit(0);
+require_once ('vendor/autoload.php');
+echo "Niall Service starting...\n";
+
+$environment = array_merge($_ENV, $_SERVER);
+ksort($environment);
+
+define("TELEGRAM_API_KEY",  $environment['TELEGRAM_BOT_API_KEY']);
+define("TELEGRAM_BOT_NAME", $environment['TELEGRAM_BOT_NAME']);
+define("NIALL_INSTANCE",    $environment['NIALL_INSTANCE']);
+define("APP_ROOT",          __DIR__);
+
+// Database Settings
+if (isset($environment['DB_PORT'])) {
+    $host = parse_url($environment['DB_PORT']);
+    $credentials = array(
+        'host'     => $host['host'],
+        'user'     => $environment['DB_ENV_MYSQL_USER'],
+        'password' => $environment['DB_ENV_MYSQL_PASSWORD'],
+        'database' => $environment['DB_ENV_MYSQL_DATABASE']
+    );
+} else {
+    die("no mysql config");
+}
+
+$nt = new \Niall\Telegram\NiallTelegram(TELEGRAM_API_KEY, TELEGRAM_BOT_NAME);
+
+while (true) {
+    $nt->run();
+}

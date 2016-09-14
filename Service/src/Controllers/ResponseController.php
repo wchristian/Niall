@@ -18,13 +18,13 @@ class ResponseController extends Controller{
         $this->niallMind = $niall;
     }
 
-    public function doResponse(Request $request, Response $response, $args){
+    public function doSpeak(Request $request, Response $response, $args){
 
         $body = $request->getParsedBody();
         $newWords = [];
 
         if(isset($body['Message'])){
-            $sentances = [];
+            $sentences = [];
             if(is_string($body['Message'])){
                 $messages = [$body['Message']];
             }else{
@@ -33,11 +33,11 @@ class ResponseController extends Controller{
             foreach($messages as $message){
                 $lines = explode(".", $message);
                 $lines = array_filter($lines);
-                $sentances = array_merge($sentances, $lines);
+                $sentences = array_merge($sentences, $lines);
             }
-            foreach($sentances as &$sentance){
-                $sentance = trim($sentance);
-                $newWords = array_merge($newWords, $this->niallMind->niall_parse_message($sentance));
+            foreach($sentences as &$sentence){
+                $sentence = trim($sentence);
+                $newWords = array_merge($newWords, $this->niallMind->niall_parse_message($sentence));
             }
         }
 
@@ -57,6 +57,35 @@ class ResponseController extends Controller{
             "reply" => $thing,
             "language" => $language,
             "words" => $outputWords,
+            'new_words' => $newWords,
+            'response_time' => number_format(microtime(true) - APP_START_MICROTIME, 3) . " sec",
+        ]);
+    }
+
+    public function doListen(Request $request, Response $response, $args){
+
+        $body = $request->getParsedBody();
+        $newWords = [];
+
+        if(isset($body['Message'])){
+            $sentences = [];
+            if(is_string($body['Message'])){
+                $messages = [$body['Message']];
+            }else{
+                $messages = $body['Message'];
+            }
+            foreach($messages as $message){
+                $lines = explode(".", $message);
+                $lines = array_filter($lines);
+                $sentences = array_merge($sentences, $lines);
+            }
+            foreach($sentences as &$sentence){
+                $sentence = trim($sentence);
+                $newWords = array_merge($newWords, $this->niallMind->niall_parse_message($sentence));
+            }
+        }
+
+        return $response->withJson([
             'new_words' => $newWords,
             'response_time' => number_format(microtime(true) - APP_START_MICROTIME, 3) . " sec",
         ]);

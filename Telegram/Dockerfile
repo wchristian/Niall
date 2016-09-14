@@ -1,11 +1,8 @@
-FROM thruio/docker-webapp:latest
-ADD . /app
+FROM php:7.0-cli
+RUN docker-php-ext-install mysqli pdo pdo_mysql
 
-# Add startup scripts
-RUN mkdir /etc/service/niall
-ADD docker/run.niall.sh /etc/service/niall/run
-RUN chmod +x /etc/service/*/run
-
-RUN composer install
-
-RUN rm /app/vendor/longman/telegram-bot/src/Commands/*.php
+COPY . /app
+RUN chmod +x /app/nt
+RUN ls -lah /app
+WORKDIR /app
+ENTRYPOINT ["/app/nt"]

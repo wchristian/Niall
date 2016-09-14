@@ -1,6 +1,22 @@
 {
+    "name": "matthewbaggett/niall-telegram",
+    "type": "project",
+    "license": "GPLv3",
+    "authors": [
+        {
+            "name": "Matthew Baggett",
+            "email": "matthew@baggett.me"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Niall\\Telegram\\": "src"
+        }
+    },
     "require": {
-        "longman/telegram-bot": "^0.27.0",
-        "duncan3dc/speaker": "^0.6.0"
+        "irazasyed/telegram-bot-sdk": "^2.0",
+        "duncan3dc/speaker": "^0.6.0",
+        "raveren/kint": "^1.0",
+        "guzzlehttp/guzzle": "^6.2"
     }
 }
