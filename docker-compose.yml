@@ -28,3 +28,23 @@ niall_service:
    - "MYSQL_USERNAME=niall"
    - "MYSQL_PASSWORD=20R834Z9CKjG6gO"
    - "MYSQL_DATABASE=niall"
+
+niall_telegram:
+  build: ./Telegram
+  links:
+    - "mysql_telegram:db"
+  volumes:
+    - "./Telegram:/app"
+  environment:
+    - 'TELEGRAM_BOT_NAME=changeme'
+    - 'TELEGRAM_BOT_API_KEY=keyhere'
+    - 'NIALL_INSTANCE=http://niall.chat'
+
+mysql_telegram:
+  image: mysql
+  environment:
+    - MYSQL_ROOT_PASSWORD=72fB2n9622G065y
+    - MYSQL_USER=nialltelegram
+    - MYSQL_PASSWORD=d517nF31M1TiXVs
+    - MYSQL_DATABASE=nialltelegram
+
