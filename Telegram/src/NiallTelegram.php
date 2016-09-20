@@ -26,11 +26,7 @@ class NiallTelegram{
 
         $this->telegram = new TelegramApi($this->api_key);
         $this->guzzle = new GuzzleClient();
-        if(file_exists(APP_ROOT . "/pointer.txt")){
-            $this->updatePointer = file_get_contents(APP_ROOT . "/pointer.txt");
-        }else {
-            $this->updatePointer = 0;
-        }
+        $this->updatePointer = file_exists(APP_ROOT . "/pointer.txt") ? file_get_contents(APP_ROOT . "/pointer.txt") : 0;
     }
 
     public function run(){
@@ -67,18 +63,20 @@ class NiallTelegram{
             'offset' => $this->updatePointer + 1,
             'limit' => 5,
         ]);
-        if(count($updates) > 0) {
-            foreach ($updates as $update) {
-                /** @var $update Objects\Update */
-                if ($update->getUpdateId() > $this->updatePointer) {
-                    $this->setUpdatePointer($update->getUpdateId());
-                }
-                if ($update->getMessage()) {
-                    $this->parseMessage($update->getMessage());
-                }
-            }
-        }else{
+
+        if(count($updates) <= 0) {
             sleep(5);
+            return;
+        }
+
+        foreach ($updates as $update) {
+            /** @var $update Objects\Update */
+            if ($update->getUpdateId() > $this->updatePointer) {
+                $this->setUpdatePointer($update->getUpdateId());
+            }
+            if ($update->getMessage()) {
+                $this->parseMessage($update->getMessage());
+            }
         }
     }
 
@@ -93,52 +91,49 @@ class NiallTelegram{
 
     private function parseMessage(Objects\Message $message){
         if(
-            $message->getText() &&
-            $message->getDate() >= strtotime("an hour ago")
+            !$message->getText() ||
+            $message->getDate() < strtotime("an hour ago")
         ){
-            if($this->containsPowerWords($message->getText(), $this->powerWords)) {
-                echo "Message: {$message->getChat()->getTitle()}/{$message->getChat()->getUsername()} said {$message->getText()}\n";
-                $response = $this->guzzle->request(
-                    'POST',
-                    NIALL_INSTANCE . "/v1/speak", [
-                        'json' => [
-                            'Message' => trim($message->getText())
-                        ],
-                        'headers' => [
-                            'User-Agent' => 'niall-telegram/1.0',
-                            'Accept' => 'application/json',
-                        ]
-                    ]
-                );
-
-                if ($response->getStatusCode() == 200) {
-                    $json = json_decode($response->getBody()->getContents());
-                    echo "Reply: {$json->reply}\n";
-                    $this->telegram->sendMessage([
-                        'chat_id' => $message->getChat()->getId(),
-                        'text' => $json->reply,
-                        'reply_to_message_id' => $message->getMessageId(),
-                    ]);
-                }
-                echo "\n";
-            }else{
-                $response = $this->guzzle->request(
-                    'POST',
-                    NIALL_INSTANCE . "/v1/listen", [
-                        'json' => [
-                            'Message' => trim($message->getText())
-                        ],
-                        'headers' => [
-                            'User-Agent' => 'niall-telegram/1.0',
-                            'Accept' => 'application/json',
-                        ]
-                    ]
-                );
-            }
+            return;
         }
+        
+        $has_power_word = $this->containsPowerWords($message->getText(), $this->powerWords);
+
+        if($has_power_word) {
+            echo "Message: {$message->getChat()->getTitle()}/{$message->getChat()->getUsername()} said {$message->getText()}\n";
+        }
+
+        $response = $this->guzzle->request(
+            'POST',
+            NIALL_INSTANCE . "/v1/" . ( $has_power_word ? "speak" : "listen" ), [
+                'json' => [
+                    'Message' => trim($message->getText())
+                ],
+                'headers' => [
+                    'User-Agent' => 'niall-telegram/1.0',
+                    'Accept' => 'application/json',
+                ]
+            ]
+        );
+
+        if(!$has_power_word) {
+            return;
+        }
+
+        if ($response->getStatusCode() != 200) {
+            echo "\n";
+            return;
+        }
+
+        $json = json_decode($response->getBody()->getContents());
+        echo "Reply: {$json->reply}\n";
+        $this->telegram->sendMessage([
+            'chat_id' => $message->getChat()->getId(),
+            'text' => $json->reply,
+            'reply_to_message_id' => $message->getMessageId(),
+        ]);
+        echo "\n";
+        return;
     }
-
-
-
 
 }
